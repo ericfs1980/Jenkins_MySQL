@@ -8,11 +8,11 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        /*stage('Checkout') {
             steps {
                 git branch: 'main', git 'https://github.com/ericfs1980/Jenkins_MySQL.git'
             }
-        }
+        }*/
 
         stage('Validate Migrations') {
             steps {
