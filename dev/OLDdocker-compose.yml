@@ -10,3 +10,6 @@ flyway:
     -user=app_user
     -password=dev123
     migrate
+
+
+# Teste de Commit.
