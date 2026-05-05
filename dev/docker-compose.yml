@@ -1,0 +1,14 @@
+services:
+  flyway:
+    image: flyway/flyway
+    container_name: flyway
+    volumes:
+      - ./db/migrations:/flyway/sql
+    command: >
+      -url=jdbc:mysql://host.docker.internal:3306/app_dev
+      -user=app_user
+      -password=dev123
+      migrate
+
+### Para rodar o seviço do Flyway, executar o comando abaixo, dentro da pasta migrations.
+### docker compose up flywal

@@ -1,0 +1,29 @@
+### Banco DEV
+
+services:
+  mysql-dev:
+    image: mysql:8.0
+    container_name: mysql-dev
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_dev
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: dev123
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  mysql_dev_data:
+    driver: local
+
+### Subir o container de Desenvolvimento
+### docker compose up -d
+
