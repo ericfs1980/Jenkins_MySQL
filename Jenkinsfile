@@ -14,22 +14,32 @@ pipeline {
             }
         }*/
 
+        
         stage('Validate Migrations') {
             steps {
                 sh '''
+                ${COMPOSE_DEV} down --remove-orphans || true
                 ${COMPOSE_DEV} run --rm flyway validate
                 '''
             }
         }
 
+
+        
         stage('Migrate DEV') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} up -d sleep 20 mysql-dev
+                ${COMPOSE_DEV} down --remove-orphans || true
+                ${COMPOSE_DEV} up -d mysql-dev
+
+                echo "Aguardando MySQL subir..."
+                sleep 20
+
                 ${COMPOSE_DEV} run --rm flyway migrate
                 '''
             }
         }
+
 
         stage('Check Status DEV') {
             steps {
