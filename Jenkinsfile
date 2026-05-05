@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/ericfs1980/Jenkins_MySQL.git'
+                git branch: 'main', git 'https://github.com/ericfs1980/Jenkins_MySQL.git'
             }
         }
 
