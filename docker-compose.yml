@@ -1,0 +1,9 @@
+
+services:
+  flyway:
+    image: flyway/flyway:latest
+
+    volumes:
+      - ./flyway/sql:/flyway/sql
+
+    entrypoint: ["flyway"]

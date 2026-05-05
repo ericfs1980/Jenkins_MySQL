@@ -20,9 +20,17 @@ services:
 
     command: --default-authentication-plugin=mysql_native_password
 
+  flyway:
+    environment:
+      FLYWAY_URL: jdbc:mysql://mysql-dev:3306/app_dev
+      FLYWAY_USER: app_user
+      FLYWAY_PASSWORD: dev123
+
+    depends_on:
+      - mysql-dev
+
 volumes:
   mysql_dev_data:
-    driver: local
 
 ### Subir o container de Desenvolvimento
 ### docker compose up -d
