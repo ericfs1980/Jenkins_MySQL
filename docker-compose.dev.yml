@@ -3,7 +3,6 @@
 services:
   mysql-dev:
     image: mysql:8.0
-    container_name: mysql-dev
     restart: unless-stopped
 
     environment:

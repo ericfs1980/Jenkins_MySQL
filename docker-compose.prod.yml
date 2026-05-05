@@ -3,7 +3,6 @@
 services:
   mysql-prod:
     image: mysql:8.0
-    container_name: mysql-prod
     restart: unless-stopped
 
     environment:
