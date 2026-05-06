@@ -63,14 +63,21 @@ pipeline {
             }
         }
 
+        
         stage('Migrate PROD') {
             steps {
                 sh '''
-                ${COMPOSE_PROD} up -d sleep 20 mysql-prod
+                ${COMPOSE_PROD} down --remove-orphans || true
+                ${COMPOSE_PROD} up -d mysql-prod
+
+                echo "Aguardando MySQL PROD subir..."
+                sleep 20
+
                 ${COMPOSE_PROD} run --rm flyway migrate
                 '''
             }
         }
+
 
         stage('Check Status PROD') {
             steps {
