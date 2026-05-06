@@ -4,6 +4,6 @@ services:
     image: flyway/flyway:latest
 
     volumes:
-      - ./flyway/sql:/flyway/sql
+      - /var/jenkins_home/workspace/Flyway-migrations-pipeline/flyway/sql:/flyway/sql
 
     entrypoint: ["flyway"]
