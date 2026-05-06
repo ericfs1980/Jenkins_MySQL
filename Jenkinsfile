@@ -15,14 +15,14 @@ pipeline {
         }*/
 
         
-        stage('Validate Migrations') {
+        /*stage('Validate Migrations') {
             steps {
                 sh '''
                 ${COMPOSE_DEV} down --remove-orphans || true
                 ${COMPOSE_DEV} run --rm flyway validate
                 '''
             }
-        }
+        }*/
 
 
         
@@ -36,6 +36,14 @@ pipeline {
                 sleep 20
 
                 ${COMPOSE_DEV} run --rm flyway migrate
+                '''
+            }
+        }
+
+        stage('Validate Migrations') {
+            steps {
+                sh '''
+                ${COMPOSE_DEV} run --rm flyway validate
                 '''
             }
         }
