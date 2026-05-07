@@ -1,4 +1,3 @@
-
 services:
   flyway:
     image: flyway/flyway:latest
@@ -6,7 +5,12 @@ services:
     volumes:
       - /host_mnt/c/XamppOLD/jenkins/Instalacao/MySQL/Jenkins_MySQL/flyway/sql:/flyway/sql
 
-    networks:
-      - app-network
-
     entrypoint: ["flyway"]
+
+    networks:
+      - app-network   # ✅ usa a network
+
+# 👇 MUITO IMPORTANTE: fora da seção services
+networks:
+  app-network:
+    name: app-network
