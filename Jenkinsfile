@@ -29,7 +29,7 @@ pipeline {
         stage('Migrate DEV') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} down --remove-orphans || true
+                ${COMPOSE_DEV} || true
                 ${COMPOSE_DEV} up -d mysql-dev
 
                 echo "Aguardando MySQL subir..."
@@ -67,7 +67,7 @@ pipeline {
         stage('Migrate PROD') {
             steps {
                 sh '''
-                ${COMPOSE_PROD} down --remove-orphans || true
+                ${COMPOSE_PROD} || true
                 ${COMPOSE_PROD} up -d mysql-prod
 
                 echo "Aguardando MySQL PROD subir..."
