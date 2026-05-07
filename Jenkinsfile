@@ -28,16 +28,12 @@ pipeline {
         
         stage('Migrate DEV') {
             steps {
-                sh '''
-                ${COMPOSE_DEV} || true
-                ${COMPOSE_DEV} up -d mysql-dev
+                    sh '''
+                    echo "Executando migrations no DEV..."
+                    ${COMPOSE_DEV} run --rm flyway migrate
+                    '''
+                }
 
-                echo "Aguardando MySQL subir..."
-                sleep 20
-
-                ${COMPOSE_DEV} run --rm flyway migrate
-                '''
-            }
         }
 
         stage('Validate Migrations') {
@@ -66,16 +62,11 @@ pipeline {
         
         stage('Migrate PROD') {
             steps {
-                sh '''
-                ${COMPOSE_PROD} || true
-                ${COMPOSE_PROD} up -d mysql-prod
-
-                echo "Aguardando MySQL PROD subir..."
-                sleep 20
-
-                ${COMPOSE_PROD} run --rm flyway migrate
-                '''
-            }
+                    sh '''
+                    echo "Executando migrations no PROD..."
+                    ${COMPOSE_PROD} run --rm flyway migrate
+                    '''
+                }
         }
 
 
