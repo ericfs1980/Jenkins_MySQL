@@ -13,4 +13,4 @@ services:
 # 👇 MUITO IMPORTANTE: fora da seção services
 networks:
   app-network:
-    name: app-network
+    external: true
