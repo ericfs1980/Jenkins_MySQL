@@ -4,7 +4,9 @@ services:
   mysql-dev:
     image: mysql:8.0
     restart: unless-stopped
-
+    networks:
+      - app-network
+    
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: app_dev

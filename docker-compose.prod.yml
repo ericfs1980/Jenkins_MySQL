@@ -4,6 +4,8 @@ services:
   mysql-prod:
     image: mysql:8.0
     restart: unless-stopped
+    networks:
+      - app-network
 
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

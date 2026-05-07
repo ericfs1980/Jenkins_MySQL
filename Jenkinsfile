@@ -30,7 +30,7 @@ pipeline {
             steps {
                     sh '''
                     echo "Executando migrations no DEV..."
-                    ${COMPOSE_DEV} run --rm --no-deps --network flyway-migrations-pipeline_default flyway migrate
+                    ${COMPOSE_DEV} run --rm --no-deps flyway migrate
                     '''
                 }
 
@@ -39,7 +39,7 @@ pipeline {
         stage('Validate Migrations') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} run --rm --no-deps --network flyway-migrations-pipeline_default flyway validate
+                ${COMPOSE_DEV} run --rm --no-deps flyway validate
                 '''
             }
         }
@@ -48,7 +48,7 @@ pipeline {
         stage('Check Status DEV') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} run --rm --no-deps --network flyway-migrations-pipeline_default flyway info
+                ${COMPOSE_DEV} run --rm --no-deps flyway info
                 '''
             }
         }
@@ -64,7 +64,7 @@ pipeline {
             steps {
                     sh '''
                     echo "Executando migrations no PROD..."
-                    ${COMPOSE_PROD} run --rm --no-deps --network flyway-migrations-pipeline_default flyway migrate
+                    ${COMPOSE_PROD} run --rm --no-deps flyway migrate
                     '''
                 }
         }
