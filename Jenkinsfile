@@ -59,14 +59,49 @@ pipeline {
             }
         }
 
+        stage('Backup PROD') {
+            steps {
+                sh '''
+                echo "Realizando backup do banco PROD..."
+
+                docker exec jenkins_mysql-mysql-prod-1 mysqldump -u root -p$3004FedoraRoot app_prod > backup_prod_$(date +%Y%m%d_%H%M%S).sql
+
+                echo "Backup realizado com sucesso!!!"
+                '''
+            }
+        }
+
         
         stage('Migrate PROD') {
             steps {
-                    sh '''
-                    echo "Executando migrations no PROD..."
-                    ${COMPOSE_PROD} run --rm --no-deps flyway migrate
-                    '''
-                }
+                script {
+                    try{
+                        sh '''
+                        echo "Executando migrations no PROD..."
+                        ${ COMPOSE_PROD } run --rm --no-deps flyway migrate
+                        '''
+                    }catch (Exception e) {
+                        echo "Erro detectado durante migration!"
+                        currentBuild.result = "FAILURE"
+                        throw e
+                    }
+                }        
+            }
+        }
+
+        stage ('RollBack PROD') {
+            when {
+                expression { currentBuild.currentResult == "FAILURE" }
+            }
+            steps{
+                sh '''
+                echo "Executando rollback do banco PROD..."
+                
+                docker exec -i jenkins_mysql-mysql-prod-1 mysqldump -u root -p$3004FedoraRoot app_prod < backup_prod_$(date +%Y%m%d_%H%M%S).sql
+                
+                echo "RollBack realizado com sucesso!!!"
+                '''
+            }
         }
 
 
