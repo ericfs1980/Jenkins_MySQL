@@ -5,6 +5,11 @@ pipeline {
         COMPOSE_DEV = "docker-compose --env-file env/dev.env -f docker-compose.yml -f docker-compose.dev.yml"
         COMPOSE_PROD = "docker-compose --env-file env/prod.env -f docker-compose.yml -f docker-compose.prod.yml"
     }
+    
+    options {
+        skipDefaultCheckout(true)
+    }
+
 
     stages {
 
@@ -27,6 +32,13 @@ pipeline {
         stage('Clean Workspace') {
             steps {
                 deleteDir()
+            }
+        }
+
+        
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
             }
         }
 
@@ -68,6 +80,7 @@ pipeline {
             steps {
                 
                 sh '''
+                set -e
                 echo "Realizando backup do banco PROD..."
 
                 BACKUP_FILE=/backups/backup_prod_$(date +%Y%m%d_%H%M%S).sql
@@ -90,16 +103,29 @@ pipeline {
                     try{
                         sh '''
                         echo "Executando migrations no PROD..."
-                        ${ COMPOSE_PROD } run --rm --no-deps flyway migrate
+                        ${COMPOSE_PROD} run --rm --no-deps flyway migrate
                         '''
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         echo "Erro detectado durante migration!"
-                        currentBuild.result = "FAILURE"
+                        
+                        // chama rollback direto
+                        sh '''
+                        echo "Executando rollback do banco PROD..."
+
+                        BACKUP_FILE=$(cat /tmp/last_backup.txt)
+
+                        docker exec -i jenkins_mysql-mysql-prod-1 \
+                        mysql -u root -p'$3004FedoraRoot' app_prod < $BACKUP_FILE
+
+                        echo "Rollback realizado com sucesso!!!"
+                        '''
+
                         throw e
                     }
                 }        
             }
         }
+
 
         stage ('RollBack PROD') {
             when {
