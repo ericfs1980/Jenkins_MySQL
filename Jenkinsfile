@@ -61,13 +61,20 @@ pipeline {
 
         stage('Backup PROD') {
             steps {
+                
                 sh '''
                 echo "Realizando backup do banco PROD..."
 
-                docker exec jenkins_mysql-mysql-prod-1 mysqldump -u root -p$3004FedoraRoot app_prod > backup_prod_$(date +%Y%m%d_%H%M%S).sql
+                BACKUP_FILE=/backups/backup_prod_$(date +%Y%m%d_%H%M%S).sql
 
-                echo "Backup realizado com sucesso!!!"
+                docker exec jenkins_mysql-mysql-prod-1 \
+                mysqldump -u app_user -papp_pass app_prod > $BACKUP_FILE
+
+                echo "Backup salvo em: $BACKUP_FILE"
+
+                echo $BACKUP_FILE > /tmp/last_backup.txt
                 '''
+
             }
         }
 
@@ -94,13 +101,18 @@ pipeline {
                 expression { currentBuild.currentResult == "FAILURE" }
             }
             steps{
+                
                 sh '''
                 echo "Executando rollback do banco PROD..."
-                
-                docker exec -i jenkins_mysql-mysql-prod-1 mysqldump -u root -p$3004FedoraRoot app_prod < backup_prod_$(date +%Y%m%d_%H%M%S).sql
-                
-                echo "RollBack realizado com sucesso!!!"
+
+                BACKUP_FILE=$(cat /tmp/last_backup.txt)
+
+                docker exec -i jenkins_mysql-mysql-prod-1 \
+                mysql -u app_user -papp_pass app_prod < $BACKUP_FILE
+
+                echo "Rollback realizado com sucesso!!!"
                 '''
+
             }
         }
 
