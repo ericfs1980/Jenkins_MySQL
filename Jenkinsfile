@@ -68,7 +68,7 @@ pipeline {
                 BACKUP_FILE=/backups/backup_prod_$(date +%Y%m%d_%H%M%S).sql
 
                 docker exec jenkins_mysql-mysql-prod-1 \
-                mysqldump -u app_user -papp_pass app_prod > $BACKUP_FILE
+                mysqldump -u root -p'$3004FedoraRoot' app_prod > $BACKUP_FILE
 
                 echo "Backup salvo em: $BACKUP_FILE"
 
@@ -108,7 +108,7 @@ pipeline {
                 BACKUP_FILE=$(cat /tmp/last_backup.txt)
 
                 docker exec -i jenkins_mysql-mysql-prod-1 \
-                mysql -u app_user -papp_pass app_prod < $BACKUP_FILE
+                mysql -u root -p'$3004FedoraRoot' app_prod < $BACKUP_FILE
 
                 echo "Rollback realizado com sucesso!!!"
                 '''
