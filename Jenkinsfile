@@ -24,6 +24,11 @@ pipeline {
             }
         }*/
 
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
 
         
         stage('Migrate DEV') {
