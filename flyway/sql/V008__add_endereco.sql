@@ -1,0 +1,2 @@
+ALTER TABLE users
+ADD COLUMN endereco VARCHAR(255); 
