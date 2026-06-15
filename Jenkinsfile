@@ -47,7 +47,7 @@ pipeline {
             steps {
                     sh '''
                     echo "Executando migrations no DEV..."
-                    ${COMPOSE_DEV} run --rm --no-deps flyway migrate
+                    ${COMPOSE_DEV} run --rm flyway migrate
                     '''
                 }
 
@@ -56,7 +56,7 @@ pipeline {
         stage('Validate Migrations') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} run --rm --no-deps flyway validate
+                ${COMPOSE_DEV} run --rm flyway validate
                 '''
             }
         }
@@ -65,7 +65,7 @@ pipeline {
         stage('Check Status DEV') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} run --rm --no-deps flyway info
+                ${COMPOSE_DEV} run --rm flyway info
                 '''
             }
         }
@@ -103,7 +103,7 @@ pipeline {
                     try{
                         sh '''
                         echo "Executando migrations no PROD..."
-                        ${COMPOSE_PROD} run --rm --no-deps flyway migrate
+                        ${COMPOSE_PROD} run --rm flyway migrate
                         '''
                     } catch (Exception e) {
                         echo "Erro detectado durante migration!"
@@ -151,7 +151,7 @@ pipeline {
         stage('Check Status PROD') {
             steps {
                 sh '''
-                ${COMPOSE_PROD} run --rm --no-deps flyway info
+                ${COMPOSE_PROD} run --rm flyway info
                 '''
             }
         }

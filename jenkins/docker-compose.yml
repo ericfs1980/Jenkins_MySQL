@@ -3,20 +3,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     container_name: jenkins
-
     ports:
       - "8084:8080"
       - "50000:50000"
-
     volumes:
       - jenkins_home:/var/jenkins_home
       - //var/run/docker.sock:/var/run/docker.sock
       - C:/backups:/backups
-
     user: root
     privileged: true
+    networks:
+      - app-network # Conecta o Jenkins à rede do ecossistema
 
 volumes:
   jenkins_home:
+
+networks:
+  app-network:
+    external: true # 🟢 Indica que a rede foi criada pelo compose da raiz
