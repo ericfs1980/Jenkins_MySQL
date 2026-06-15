@@ -47,7 +47,7 @@ pipeline {
             steps {
                     sh '''
                     echo "Executando migrations no DEV..."
-                    ${COMPOSE_DEV} run --rm flyway migrate
+                    ${COMPOSE_DEV} run --rm --no-deps flyway migrate
                     '''
                 }
 
