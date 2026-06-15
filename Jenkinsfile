@@ -103,7 +103,7 @@ pipeline {
                     try{
                         sh '''
                         echo "Executando migrations no PROD..."
-                        ${COMPOSE_PROD} run --rm flyway migrate
+                        ${COMPOSE_PROD} run --rm --no-deps flyway migrate
                         '''
                     } catch (Exception e) {
                         echo "Erro detectado durante migration!"
@@ -151,7 +151,7 @@ pipeline {
         stage('Check Status PROD') {
             steps {
                 sh '''
-                ${COMPOSE_PROD} run --rm flyway info
+                ${COMPOSE_PROD} run --rm --no-deps flyway info
                 '''
             }
         }
