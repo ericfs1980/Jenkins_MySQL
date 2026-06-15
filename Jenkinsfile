@@ -56,7 +56,7 @@ pipeline {
         stage('Validate Migrations') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} run --rm flyway validate
+                ${COMPOSE_DEV} run --rm --no-deps flyway validate
                 '''
             }
         }
@@ -65,7 +65,7 @@ pipeline {
         stage('Check Status DEV') {
             steps {
                 sh '''
-                ${COMPOSE_DEV} run --rm flyway info
+                ${COMPOSE_DEV} run --rm --no-deps flyway info
                 '''
             }
         }
